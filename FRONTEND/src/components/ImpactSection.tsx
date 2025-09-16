@@ -1,8 +1,15 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Leaf, TrendingUp, Shield, Globe } from 'lucide-react';
+import CountUp from 'react-countup';
+import { useInView } from 'react-intersection-observer';
 
 const ImpactSection: React.FC = () => {
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.3,
+  });
+
   const impacts = [
     {
       icon: Leaf,
@@ -39,7 +46,20 @@ const ImpactSection: React.FC = () => {
   ];
 
   return (
-    <section className="py-20 bg-gradient-to-br from-slate-800 to-slate-900">
+    <section 
+      ref={ref}
+      className="relative py-20 overflow-hidden"
+      style={{
+        backgroundImage: `url('https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop')`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+      }}
+    >
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900/95 via-slate-800/90 to-slate-900/95"></div>
+      <div className="absolute inset-0 bg-gradient-to-r from-green-900/20 via-transparent to-blue-900/20"></div>
+      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -65,14 +85,23 @@ const ImpactSection: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               viewport={{ once: true }}
-              whileHover={{ y: -10 }}
+              whileHover={{ y: -10, scale: 1.02 }}
               className="text-center group"
             >
               <div className="relative mb-6">
-                <div className={`w-20 h-20 mx-auto rounded-full bg-gradient-to-r ${impact.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                <motion.div 
+                  whileHover={{ rotate: 360 }}
+                  transition={{ duration: 0.6 }}
+                  className={`w-20 h-20 mx-auto rounded-full bg-gradient-to-r ${impact.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}
+                >
                   <impact.icon className="w-10 h-10 text-white" />
+                </motion.div>
+                <div className="text-4xl font-bold text-white mb-2">
+                  {impact.stat === '1.75M' && inView && <><CountUp end={1.75} decimals={2} duration={2} />M</>}
+                  {impact.stat === '₹50,000 Cr' && inView && <>₹<CountUp end={50000} duration={2} separator="," /> Cr</>}
+                  {impact.stat === '100%' && inView && <><CountUp end={100} duration={2} />%</>}
+                  {impact.stat === '∞' && '∞'}
                 </div>
-                <div className="text-4xl font-bold text-white mb-2">{impact.stat}</div>
                 <div className="text-sm text-gray-400">{impact.statLabel}</div>
               </div>
               
@@ -93,7 +122,7 @@ const ImpactSection: React.FC = () => {
           viewport={{ once: true }}
           className="mt-16"
         >
-          <div className="bg-gradient-to-r from-amber-600 to-amber-500 rounded-2xl p-8 md:p-12 text-center">
+          <div className="bg-gradient-to-r from-amber-600/90 to-amber-500/90 backdrop-blur-sm rounded-2xl p-8 md:p-12 text-center border border-amber-400/20">
             <h3 className="text-3xl md:text-4xl font-bold text-white mb-6">
               Join the Data Security Revolution
             </h3>
@@ -102,18 +131,27 @@ const ImpactSection: React.FC = () => {
               secure, and economically viable technology ecosystem.
             </p>
             <div className="grid md:grid-cols-3 gap-8">
-              <div className="text-center">
+              <motion.div 
+                whileHover={{ scale: 1.05 }}
+                className="text-center"
+              >
                 <div className="text-3xl font-bold text-white mb-2">Secure</div>
                 <div className="text-amber-100">Military-grade data destruction</div>
-              </div>
-              <div className="text-center">
+              </motion.div>
+              <motion.div 
+                whileHover={{ scale: 1.05 }}
+                className="text-center"
+              >
                 <div className="text-3xl font-bold text-white mb-2">Sustainable</div>
                 <div className="text-amber-100">Environmentally responsible recycling</div>
-              </div>
-              <div className="text-center">
+              </motion.div>
+              <motion.div 
+                whileHover={{ scale: 1.05 }}
+                className="text-center"
+              >
                 <div className="text-3xl font-bold text-white mb-2">Scalable</div>
                 <div className="text-amber-100">Enterprise-ready solutions</div>
-              </div>
+              </motion.div>
             </div>
           </div>
         </motion.div>

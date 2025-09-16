@@ -2,21 +2,17 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Download, Disc, Usb, Zap, Shield, QrCode, Monitor } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
-import AuthModal from '../components/AuthModal';
 import Navbar from '../components/Navbar';
 
 const ISODownload: React.FC = () => {
-  const { isAuthenticated } = useAuth();
-  const [showAuthModal, setShowAuthModal] = useState(false);
 
   const handleDownload = () => {
-    if (!isAuthenticated) {
-      setShowAuthModal(true);
-    } else {
-      // Simulate download
-      alert('Download started! Check your downloads folder.');
-    }
+    // Simulate download
+    const link = document.createElement('a');
+    link.href = '#'; // Replace with actual download URL
+    link.download = 'e2x-universal-v1.0.0.iso';
+    link.click();
+    alert('Download started! Check your downloads folder.');
   };
 
   const asciiArt = `╔════════════════════════════════════════════════════════════════════════════╗
@@ -112,11 +108,13 @@ const ISODownload: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-slate-900 rounded-2xl p-8 shadow-2xl"
+              className="bg-slate-900 rounded-2xl p-6 md:p-8 shadow-2xl overflow-hidden"
             >
-              <pre className="text-purple-400 text-xs font-mono leading-tight mb-8 overflow-x-auto">
+              <div className="overflow-x-auto mb-8">
+                <pre className="text-purple-400 text-xs font-mono leading-tight whitespace-pre" style={{ fontFamily: "'Courier New', monospace" }}>
                 {asciiArt}
-              </pre>
+                </pre>
+              </div>
               
               <div className="text-white">
                 <h1 className="text-3xl font-bold mb-4">E2X Universal ISO</h1>
@@ -143,15 +141,13 @@ const ISODownload: React.FC = () => {
 
                 <button
                   onClick={handleDownload}
-                  className="w-full bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 text-white py-4 px-6 rounded-lg font-bold text-lg transition-all flex items-center justify-center shadow-lg hover:shadow-xl transform hover:scale-105"
+                  className="w-full bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 text-white py-4 px-6 rounded-lg font-bold text-lg transition-all flex items-center justify-center shadow-lg hover:shadow-xl transform hover:scale-105 hover:shadow-purple-500/25"
                 >
                   <Download className="w-6 h-6 mr-2" />
                   Download Universal ISO
                 </button>
 
-                <p className="text-gray-400 text-sm mt-4 text-center">
-                  {!isAuthenticated ? 'Login required to download' : 'Ready to download'}
-                </p>
+                <p className="text-gray-400 text-sm mt-4 text-center">Ready to download</p>
               </div>
             </motion.div>
 
@@ -259,11 +255,6 @@ const ISODownload: React.FC = () => {
         </div>
       </div>
 
-      <AuthModal 
-        isOpen={showAuthModal}
-        onClose={() => setShowAuthModal(false)}
-        onSuccess={() => setShowAuthModal(false)}
-      />
     </div>
   );
 };
